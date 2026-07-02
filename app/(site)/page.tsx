@@ -49,6 +49,16 @@ export default async function Home() {
     for (const t of parseTechStack(row.techStack)) techSet.add(t.trim());
   }
 
+  let sectionOrder = ['featured', 'about', 'categories', 'techstack', 'cta'];
+  if (settings.home_section_order) {
+    try {
+      const parsed = JSON.parse(settings.home_section_order);
+      if (Array.isArray(parsed)) sectionOrder = parsed;
+    } catch {
+      // fall back to default order
+    }
+  }
+
   return (
     <HomePageClient
       featuredProjects={featured.map(serializeProject)}
@@ -59,6 +69,13 @@ export default async function Home() {
       statsTechnologies={String(techSet.size)}
       statsRoblox={String(robloxCount)}
       contactEmail={settings.contact_email || 'contact@blastpowa.dev'}
+      heroEyebrow={settings.home_hero_eyebrow || "Paul Adelabu — TU Dublin '27"}
+      heroHeading={settings.home_hero_heading || 'Cinematic product portfolio for games, AI tools, and Roblox systems.'}
+      heroSubtext={settings.home_hero_subtext || 'Head developer on Roblox titles, creator of Drift, and maker of cinematic product experiences.'}
+      aboutBio={settings.bio || 'Computing student at TU Dublin, graduating 2027. Head developer on Roblox titles and creator of AI-first tools.'}
+      ctaHeading={settings.home_cta_heading || 'Let’s build the next product together.'}
+      ctaSubtext={settings.home_cta_subtext || 'Contact Paul directly and show work that feels cinematic.'}
+      sectionOrder={sectionOrder}
     />
   );
 }

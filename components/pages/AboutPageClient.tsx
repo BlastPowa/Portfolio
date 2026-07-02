@@ -17,7 +17,7 @@ const skillGroups = [
   { category: 'Databases', items: ['MongoDB', 'Supabase', 'MySQL', 'SQLite'] },
   { category: 'Cloud & Deploy', items: ['AWS S3', 'Railway', 'PythonAnywhere', 'Vercel'] },
   { category: 'Game Dev', items: ['Unity (C#)', 'Roblox / Lua', 'HLSL / ShaderLab', 'Blender'] },
-  { category: 'AI & LLMs', items: ['Claude AI', 'ChatGPT / OpenAI', 'Gemini', 'Copilot', 'Codex', 'Prompt Engineering'] },
+  { category: 'AI & LLMs', items: ['ChatGPT / OpenAI', 'Gemini', 'Copilot', 'Codex', 'Prompt Engineering'] },
   { category: 'Design & Media', items: ['Figma', 'Canva', 'Photoshop', 'PIXLR', 'Premiere Pro', 'DaVinci Resolve', 'CapCut', 'Filmora'] },
   { category: 'Networking', items: ['WAN', 'LAN Switching', 'Wireless', 'IP Troubleshooting'] },
   { category: 'Hardware & OS', items: ['Device Diagnostics', 'OS Management', 'Arduino / Embedded Systems'] },
@@ -32,7 +32,7 @@ const certifications = [
 
 const cvProjects = [
   { title: 'Campus Navigation Web App (Campus Quest)', tag: 'College Module', year: '2026', detail: 'Indoor navigation and gamification app for TU Dublin Blanchardstown.' },
-  { title: 'Drift', tag: 'Personal', year: '2026', detail: 'AI-powered browser tab tracker with re-entry briefs using Claude API.' },
+  { title: 'Drift', tag: 'Personal', year: '2026', detail: 'AI-powered browser tab tracker with re-entry briefs.' },
   { title: 'Recruiting Web App with Auto CV Fill', tag: 'College Module', year: '2026', detail: 'Recruiting platform for hospitality venues with automatic CV parsing.', githubUrl: 'https://github.com/BlastPowa/WebFrameworkProject' },
   { title: 'E-Commerce Shopping Site', tag: 'College Module', year: '2025', detail: 'Online shop with product listings, cart, checkout, and order tracking.' },
   { title: 'Pandemic Virus Simulator', tag: 'College Module', year: '2025', detail: 'Multi-threaded simulation of virus spread across a global population.' },

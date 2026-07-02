@@ -1,13 +1,14 @@
 import { prisma } from '@/lib/prisma';
 import DashboardClient from '@/components/admin/DashboardClient';
+import { ADMIN_BASE } from '@/lib/admin-path';
 
 export const dynamic = 'force-dynamic';
 
 const actions = [
-  { label: 'Manage projects', href: '/admin/projects' },
-  { label: 'Manage videos', href: '/admin/videos' },
-  { label: 'Manage Roblox', href: '/admin/roblox' },
-  { label: 'Manage settings', href: '/admin/settings' },
+  { label: 'Manage projects', href: `${ADMIN_BASE}/projects` },
+  { label: 'Manage videos', href: `${ADMIN_BASE}/videos` },
+  { label: 'Manage Roblox', href: `${ADMIN_BASE}/roblox` },
+  { label: 'Manage settings', href: `${ADMIN_BASE}/settings` },
 ];
 
 export default async function AdminDashboardPage() {

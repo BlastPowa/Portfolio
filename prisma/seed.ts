@@ -45,13 +45,17 @@ async function main() {
 
   await prisma.project.upsert({
     where: { slug: 'drift' },
-    update: { year: 2026 },
+    update: {
+      year: 2026,
+      description: 'AI-powered productivity tool that passively tracks browser tab activity and generates re-entry briefs.',
+      techStack: '["Next.js","TypeScript","Chrome Extension","Prisma","SQLite"]',
+    },
     create: {
       title: 'Drift',
       slug: 'drift',
       category: 'personal',
-      description: 'AI-powered productivity tool that passively tracks browser tab activity and generates re-entry briefs using Claude API.',
-      techStack: '["Next.js","TypeScript","Claude API","Chrome Extension","Prisma","SQLite"]',
+      description: 'AI-powered productivity tool that passively tracks browser tab activity and generates re-entry briefs.',
+      techStack: '["Next.js","TypeScript","Chrome Extension","Prisma","SQLite"]',
       year: 2026,
       featured: true,
       orderIndex: 1,

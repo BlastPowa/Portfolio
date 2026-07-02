@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (pathname.startsWith('/admin/login')) {
+  if (pathname.startsWith('/portal-d5b593f5c0/login')) {
     return NextResponse.next();
   }
 
@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
   });
 
   if (!token) {
-    const loginUrl = new URL('/admin/login', request.url);
+    const loginUrl = new URL('/portal-d5b593f5c0/login', request.url);
     loginUrl.searchParams.set('callbackUrl', request.url);
     return NextResponse.redirect(loginUrl);
   }
@@ -46,5 +46,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/admin/:path*'],
+  matcher: ['/portal-d5b593f5c0/:path*', '/api/admin/:path*'],
 };

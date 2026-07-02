@@ -113,11 +113,11 @@ export default function ProjectsAdminClient({ initialProjects }: ProjectsAdminCl
   }
 
   function addImage(url: string) {
-    updateField('images', [...form.images, { url, alt: form.title }]);
+    setForm((f) => ({ ...f, images: [...f.images, { url, alt: f.title }] }));
   }
 
   function removeImage(index: number) {
-    updateField('images', form.images.filter((_, i) => i !== index));
+    setForm((f) => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
   }
 
   async function handleSubmit(e: FormEvent) {

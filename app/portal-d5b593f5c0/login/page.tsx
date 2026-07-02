@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { ADMIN_BASE } from '@/lib/admin-path';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ export default function AdminLoginPage() {
     const result = await signIn('credentials', {
       username,
       password,
-      callbackUrl: '/admin',
+      callbackUrl: ADMIN_BASE,
       redirect: false,
     });
 

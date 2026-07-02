@@ -51,7 +51,7 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   session: { strategy: 'jwt' },
-  pages: { signIn: '/admin/login' },
+  pages: { signIn: '/portal-d5b593f5c0/login' },
 };
 
 const handler = NextAuth(authOptions);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -28,6 +28,16 @@ const techItems = [
   { name: 'DynamoDB' },
 ];
 
+const SECTION_LABELS: Record<string, string> = {
+  featured: 'Featured projects',
+  about: 'About',
+  categories: 'Categories',
+  techstack: 'Tech stack',
+  cta: 'Call to action',
+};
+
+const DEFAULT_SECTION_ORDER = ['featured', 'about', 'categories', 'techstack', 'cta'];
+
 interface HomePageClientProps {
   featuredProjects: Project[];
   schoolProjects: Project[];
@@ -37,6 +47,13 @@ interface HomePageClientProps {
   statsTechnologies: string;
   statsRoblox: string;
   contactEmail: string;
+  heroEyebrow: string;
+  heroHeading: string;
+  heroSubtext: string;
+  aboutBio: string;
+  ctaHeading: string;
+  ctaSubtext: string;
+  sectionOrder: string[];
 }
 
 export default function HomePageClient({
@@ -48,7 +65,18 @@ export default function HomePageClient({
   statsTechnologies,
   statsRoblox,
   contactEmail,
+  heroEyebrow,
+  heroHeading,
+  heroSubtext,
+  aboutBio,
+  ctaHeading,
+  ctaSubtext,
+  sectionOrder,
 }: HomePageClientProps) {
+  const orderedSections = [
+    ...sectionOrder.filter((key) => key in SECTION_LABELS),
+    ...DEFAULT_SECTION_ORDER.filter((key) => !sectionOrder.includes(key)),
+  ];
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -60,6 +88,116 @@ export default function HomePageClient({
 
   const spotlight = featuredProjects[activeIndex] ?? null;
   const spotlightImage = spotlight?.images[0]?.url;
+
+  const sections: Record<string, React.ReactNode> = {
+    featured: (
+      <section>
+        <SectionHeader title="Featured projects" subtitle="Work that defines the portfolio." />
+        {featuredProjects.length === 0 ? (
+          <GlassCard style={{ padding: 40, textAlign: 'center' }}>
+            <p style={{ margin: 0, color: 'var(--text-muted)' }}>No featured projects yet. Add some through the admin dashboard.</p>
+          </GlassCard>
+        ) : (
+          <div style={{ display: 'grid', gap: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+            {featuredProjects.map((project) => (
+              <Link key={project.id} href={`/projects/${project.slug}`} style={{ textDecoration: 'none' }}>
+                <ProjectCard project={project} />
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+    ),
+    about: (
+      <section>
+        <SectionHeader title="About" subtitle="Product-level portfolio with dark cinematic polish." />
+        <div className="home-about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <GlassCard style={{ padding: 28, display: 'grid', gap: 16 }}>
+            <div style={{ display: 'grid', gap: 18 }}>
+              <div style={{ width: 120, height: 120, borderRadius: 999, border: '0.5px solid rgba(255,255,255,0.12)', overflow: 'hidden', background: '#111111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Avatar</span>
+              </div>
+              <div>
+                <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 28 }}>Paul Adelabu</h2>
+                <p style={{ margin: '10px 0 0', color: 'var(--text-secondary)', lineHeight: 1.8 }}>{aboutBio}</p>
+              </div>
+            </div>
+          </GlassCard>
+          <div style={{ display: 'grid', gap: 16 }}>
+            <div style={statCard}>
+              <span style={statNumber}>{statsProjects}</span>
+              <span style={statLabel}>Projects</span>
+            </div>
+            <div style={statCard}>
+              <span style={statNumber}>{statsTechnologies}</span>
+              <span style={statLabel}>Technologies</span>
+            </div>
+            <div style={statCard}>
+              <span style={statNumber}>{statsRoblox}</span>
+              <span style={statLabel}>Roblox games</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    ),
+    categories: (
+      <section>
+        <SectionHeader title="Categories" subtitle="School, personal, Roblox." />
+        <div style={{ display: 'grid', gap: 24 }}>
+          <HorizontalCarousel title="School projects" subtitle="TU Dublin work" gradient="var(--grad-school)" viewAllHref="/projects/school">
+            {schoolProjects.map((project) => (
+              <Link key={project.id} href={`/projects/${project.slug}`} style={{ width: 360, textDecoration: 'none', flexShrink: 0 }}>
+                <ProjectCard project={project} />
+              </Link>
+            ))}
+          </HorizontalCarousel>
+
+          <HorizontalCarousel title="Personal projects" subtitle="Drift, Reverie, and more" gradient="var(--grad-personal)" viewAllHref="/projects/personal">
+            {personalProjects.map((project) => (
+              <Link key={project.id} href={`/projects/${project.slug}`} style={{ width: 360, textDecoration: 'none', flexShrink: 0 }}>
+                <ProjectCard project={project} />
+              </Link>
+            ))}
+          </HorizontalCarousel>
+
+          <HorizontalCarousel title="Roblox" subtitle="Games and scripts" gradient="var(--grad-roblox)" viewAllHref="/roblox">
+            {robloxGames.map((game) => (
+              <div key={game.id} style={{ width: 360 }}>
+                <GlassCard style={{ padding: 20, minHeight: 260, display: 'grid', gap: 16 }}>
+                  <span style={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>{game.status}</span>
+                  <h3 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 20 }}>{game.title}</h3>
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.7 }}>{game.description}</p>
+                  {game.playerCount && <span style={badge}>Players {game.playerCount}</span>}
+                </GlassCard>
+              </div>
+            ))}
+          </HorizontalCarousel>
+        </div>
+      </section>
+    ),
+    techstack: (
+      <section>
+        <SectionHeader title="Tech stack" subtitle="Tools and systems used across the portfolio." />
+        <div style={{ display: 'grid', gap: 14 }}>
+          <InfiniteMarquee items={techItems} speed={28} />
+          <InfiniteMarquee items={techItems} speed={32} reverse />
+        </div>
+      </section>
+    ),
+    cta: (
+      <section>
+        <GlassCard style={{ padding: 40, background: 'linear-gradient(135deg, rgba(0,212,255,0.18), rgba(123,47,190,0.16))', border: '0.5px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'grid', gap: 18, textAlign: 'center' }}>
+            <GradientText style={{ fontSize: 32, fontWeight: 800 }}>{ctaHeading}</GradientText>
+            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: 16, lineHeight: 1.8 }}>{ctaSubtext}</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 18, flexWrap: 'wrap' }}>
+              <a href={`mailto:${contactEmail}`} className="cta-btn" style={ctaButton}>Email Paul</a>
+            </div>
+          </div>
+        </GlassCard>
+      </section>
+    ),
+  };
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
@@ -94,12 +232,12 @@ export default function HomePageClient({
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 30%, rgba(0,212,255,0.18), transparent 22%), radial-gradient(circle at 80% 20%, rgba(123,47,190,0.16), transparent 20%), radial-gradient(circle at 50% 80%, rgba(255,45,85,0.12), transparent 24%)' }} />
         <div className="home-hero-grid" style={{ position: 'relative', width: '100%', maxWidth: 1200, display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 40, alignItems: 'center' }}>
           <div style={{ zIndex: 1 }}>
-            <p style={{ margin: 0, color: 'var(--text-secondary)', letterSpacing: '0.24em', textTransform: 'uppercase', fontSize: 12 }}>Paul Adelabu — TU Dublin ’26</p>
+            <p style={{ margin: 0, color: 'var(--text-secondary)', letterSpacing: '0.24em', textTransform: 'uppercase', fontSize: 12 }}>{heroEyebrow}</p>
             <h1 style={{ margin: '22px 0 18px', fontSize: 64, lineHeight: 1.02, maxWidth: 700, fontFamily: 'var(--font-display)' }}>
-              Cinematic product portfolio for games, AI tools, and Roblox systems.
+              {heroHeading}
             </h1>
             <p style={{ margin: 0, maxWidth: 620, color: 'var(--text-secondary)', fontSize: 18, lineHeight: 1.8 }}>
-              Head developer on Roblox titles, creator of Drift and Reverie, and maker of cinematic product experiences.
+              {heroSubtext}
             </p>
             <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', marginTop: 32 }}>
               <a href="/projects/school" className="cta-btn" style={ctaButton}>School projects</a>
@@ -180,109 +318,10 @@ export default function HomePageClient({
       </section>
 
       <main style={{ maxWidth: 1400, margin: '0 auto', padding: '0 32px', display: 'grid', gap: 64 }}>
-        <section>
-          <SectionHeader title="Featured projects" subtitle="Work that defines the portfolio." />
-          {featuredProjects.length === 0 ? (
-            <GlassCard style={{ padding: 40, textAlign: 'center' }}>
-              <p style={{ margin: 0, color: 'var(--text-muted)' }}>No featured projects yet. Add some through the admin dashboard.</p>
-            </GlassCard>
-          ) : (
-            <div style={{ display: 'grid', gap: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-              {featuredProjects.map((project) => (
-                <Link key={project.id} href={`/projects/${project.slug}`} style={{ textDecoration: 'none' }}>
-                  <ProjectCard project={project} />
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
-
-        <section>
-          <SectionHeader title="About" subtitle="Product-level portfolio with dark cinematic polish." />
-          <div className="home-about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'center' }}>
-            <GlassCard style={{ padding: 28, display: 'grid', gap: 16 }}>
-              <div style={{ display: 'grid', gap: 18 }}>
-                <div style={{ width: 120, height: 120, borderRadius: 999, border: '0.5px solid rgba(255,255,255,0.12)', overflow: 'hidden', background: '#111111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Avatar</span>
-                </div>
-                <div>
-                  <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 28 }}>Paul Adelabu</h2>
-                  <p style={{ margin: '10px 0 0', color: 'var(--text-secondary)', lineHeight: 1.8 }}>Computing student at TU Dublin, graduating 2027. Head developer on Roblox titles and creator of AI-first tools.</p>
-                </div>
-              </div>
-            </GlassCard>
-            <div style={{ display: 'grid', gap: 16 }}>
-              <div style={statCard}>
-                <span style={statNumber}>{statsProjects}</span>
-                <span style={statLabel}>Projects</span>
-              </div>
-              <div style={statCard}>
-                <span style={statNumber}>{statsTechnologies}</span>
-                <span style={statLabel}>Technologies</span>
-              </div>
-              <div style={statCard}>
-                <span style={statNumber}>{statsRoblox}</span>
-                <span style={statLabel}>Roblox games</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <SectionHeader title="Categories" subtitle="School, personal, Roblox." />
-          <div style={{ display: 'grid', gap: 24 }}>
-            <HorizontalCarousel title="School projects" subtitle="TU Dublin work" gradient="var(--grad-school)" viewAllHref="/projects/school">
-              {schoolProjects.map((project) => (
-                <Link key={project.id} href={`/projects/${project.slug}`} style={{ width: 360, textDecoration: 'none', flexShrink: 0 }}>
-                  <ProjectCard project={project} />
-                </Link>
-              ))}
-            </HorizontalCarousel>
-
-            <HorizontalCarousel title="Personal projects" subtitle="Drift, Reverie, and more" gradient="var(--grad-personal)" viewAllHref="/projects/personal">
-              {personalProjects.map((project) => (
-                <Link key={project.id} href={`/projects/${project.slug}`} style={{ width: 360, textDecoration: 'none', flexShrink: 0 }}>
-                  <ProjectCard project={project} />
-                </Link>
-              ))}
-            </HorizontalCarousel>
-
-            <HorizontalCarousel title="Roblox" subtitle="Games and scripts" gradient="var(--grad-roblox)" viewAllHref="/roblox">
-              {robloxGames.map((game) => (
-                <div key={game.id} style={{ width: 360 }}>
-                  <GlassCard style={{ padding: 20, minHeight: 260, display: 'grid', gap: 16 }}>
-                    <span style={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>{game.status}</span>
-                    <h3 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 20 }}>{game.title}</h3>
-                    <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.7 }}>{game.description}</p>
-                    {game.playerCount && <span style={badge}>Players {game.playerCount}</span>}
-                  </GlassCard>
-                </div>
-              ))}
-            </HorizontalCarousel>
-          </div>
-        </section>
-
-        <section>
-          <SectionHeader title="Tech stack" subtitle="Tools and systems used across the portfolio." />
-          <div style={{ display: 'grid', gap: 14 }}>
-            <InfiniteMarquee items={techItems} speed={28} />
-            <InfiniteMarquee items={techItems} speed={32} reverse />
-          </div>
-        </section>
-
-        <section>
-          <GlassCard style={{ padding: 40, background: 'linear-gradient(135deg, rgba(0,212,255,0.18), rgba(123,47,190,0.16))', border: '0.5px solid rgba(255,255,255,0.08)' }}>
-            <div style={{ display: 'grid', gap: 18, textAlign: 'center' }}>
-              <GradientText style={{ fontSize: 32, fontWeight: 800 }}>Let’s build the next product together.</GradientText>
-              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: 16, lineHeight: 1.8 }}>Contact Paul directly and show work that feels cinematic.</p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 18, flexWrap: 'wrap' }}>
-                <a href={`mailto:${contactEmail}`} className="cta-btn" style={ctaButton}>Email Paul</a>
-              </div>
-            </div>
-          </GlassCard>
-        </section>
+        {orderedSections.map((key) => (
+          <Fragment key={key}>{sections[key]}</Fragment>
+        ))}
       </main>
-
     </div>
   );
 }
@@ -306,16 +345,30 @@ const ctaButtonSecondary: React.CSSProperties = {
 };
 
 const statCard: React.CSSProperties = {
-  padding: '28px',
+  padding: '24px 28px',
   borderRadius: 24,
   background: 'rgba(255,255,255,0.04)',
   border: '0.5px solid rgba(255,255,255,0.08)',
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  gap: 4,
+};
+
+const statNumber: React.CSSProperties = {
   fontFamily: 'var(--font-display)',
   fontSize: 40,
   color: '#ffffff',
+  lineHeight: 1,
+};
+
+const statLabel: React.CSSProperties = {
+  fontFamily: 'var(--font-mono)',
+  fontSize: 11,
+  letterSpacing: '0.12em',
+  textTransform: 'uppercase',
+  color: 'var(--text-muted)',
 };
 
 const badge: React.CSSProperties = {

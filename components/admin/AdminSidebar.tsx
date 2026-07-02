@@ -13,6 +13,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import GradientText from '@/components/GradientText';
+import { ADMIN_BASE } from '@/lib/admin-path';
 
 interface NavItem {
   label: string;
@@ -21,12 +22,12 @@ interface NavItem {
 }
 
 const ITEMS: NavItem[] = [
-  { label: 'Dashboard', href: '/admin', Icon: LayoutDashboard },
-  { label: 'Projects', href: '/admin/projects', Icon: FolderOpen },
-  { label: 'Videos', href: '/admin/videos', Icon: Film },
-  { label: 'Roblox', href: '/admin/roblox', Icon: Gamepad2 },
-  { label: 'Comments', href: '/admin/comments', Icon: MessageSquare },
-  { label: 'Settings', href: '/admin/settings', Icon: Settings },
+  { label: 'Dashboard', href: ADMIN_BASE, Icon: LayoutDashboard },
+  { label: 'Projects', href: `${ADMIN_BASE}/projects`, Icon: FolderOpen },
+  { label: 'Videos', href: `${ADMIN_BASE}/videos`, Icon: Film },
+  { label: 'Roblox', href: `${ADMIN_BASE}/roblox`, Icon: Gamepad2 },
+  { label: 'Comments', href: `${ADMIN_BASE}/comments`, Icon: MessageSquare },
+  { label: 'Settings', href: `${ADMIN_BASE}/settings`, Icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -35,7 +36,7 @@ export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-top">
-        <Link href="/admin" style={{ textDecoration: 'none' }}>
+        <Link href={ADMIN_BASE} style={{ textDecoration: 'none' }}>
           <GradientText
             style={{
               fontFamily: 'var(--font-display)',
@@ -51,7 +52,7 @@ export default function AdminSidebar() {
 
       <nav className="admin-sidebar-nav">
         {ITEMS.map((item) => {
-          const active = pathname === item.href || (item.href !== '/admin' && pathname?.startsWith(item.href));
+          const active = pathname === item.href || (item.href !== ADMIN_BASE && pathname?.startsWith(item.href));
           return (
             <Link
               key={item.href}
@@ -67,7 +68,7 @@ export default function AdminSidebar() {
 
       <div className="admin-sidebar-bottom">
         <button
-          onClick={() => void signOut({ callbackUrl: '/admin/login' })}
+          onClick={() => void signOut({ callbackUrl: `${ADMIN_BASE}/login` })}
           className="admin-nav-link"
           style={{ background: 'transparent', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
         >

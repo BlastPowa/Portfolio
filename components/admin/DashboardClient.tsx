@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import GradientText from '@/components/GradientText';
 import SectionHeader from '@/components/SectionHeader';
+import { ADMIN_BASE } from '@/lib/admin-path';
 
 interface StatItem {
   label: string;
@@ -57,7 +58,7 @@ export default function DashboardClient({ stats, actions }: DashboardClientProps
                 }}
               >
                 <div style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 10 }}>{item.label}</div>
-                <GradientText style={{ fontSize: 20, fontWeight: 700 }}>{item.href.replace('/admin/', '') || 'dashboard'}</GradientText>
+                <GradientText style={{ fontSize: 20, fontWeight: 700 }}>{item.href.replace(`${ADMIN_BASE}/`, '') || 'dashboard'}</GradientText>
               </motion.div>
             </Link>
           ))}

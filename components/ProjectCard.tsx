@@ -70,28 +70,32 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
 
       <div style={{ position: 'absolute', top: 16, right: 16, display: 'flex', gap: 8 }}>
         {project.githubUrl && (
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            onClick={(e) => e.stopPropagation()}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              window.open(project.githubUrl!, '_blank', 'noopener,noreferrer');
+            }}
             aria-label="GitHub"
             style={iconBtn}
           >
             <Code2 size={14} />
-          </a>
+          </button>
         )}
         {project.liveUrl && (
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noreferrer"
-            onClick={(e) => e.stopPropagation()}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              window.open(project.liveUrl!, '_blank', 'noopener,noreferrer');
+            }}
             aria-label="Live site"
             style={iconBtn}
           >
             <ExternalLink size={14} />
-          </a>
+          </button>
         )}
       </div>
 
@@ -172,5 +176,7 @@ const iconBtn: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   textDecoration: 'none',
+  cursor: 'pointer',
+  padding: 0,
   zIndex: 2,
 };
