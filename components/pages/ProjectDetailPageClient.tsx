@@ -26,6 +26,13 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
   const gradient = gradientForCategory(project.category);
   const backHref = project.category === 'school' ? '/projects/school' : project.category === 'personal' ? '/projects/personal' : '/roblox';
 
+  const accentMap: Record<string, { rgb: string; text: string }> = {
+    personal: { rgb: '74,222,128', text: '#86efac' },
+    school: { rgb: '56,189,248', text: '#7dd3fc' },
+    roblox: { rgb: '255,154,60', text: '#fdba74' },
+  };
+  const accent = accentMap[project.category] ?? accentMap.school;
+
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -168,20 +175,20 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 32px 96px', display: 'grid', gap: 56 }}>
         {project.story && (
-          <HudPanel title="// LOG: Why I built this">
+          <HudPanel title="About this project" accentRgb={accent.rgb} accentText={accent.text}>
             <p style={{ margin: 0, maxWidth: 820, fontSize: 16, lineHeight: 1.8, color: 'var(--text-secondary)' }}>{project.story}</p>
           </HudPanel>
         )}
 
         {images.length > 0 && (
-          <HudPanel title="// Gallery">
+          <HudPanel title="Gallery" accentRgb={accent.rgb} accentText={accent.text}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 14 }}>
               {images.map((img, i) => (
                 <button
                   key={img.id}
                   onClick={() => setLightboxIndex(i)}
                   aria-label={`View image ${i + 1} full size`}
-                  style={{ position: 'relative', aspectRatio: '16/10', borderRadius: 8, overflow: 'hidden', cursor: 'pointer', padding: 0, border: '1px solid rgba(168,85,247,0.2)' }}
+                  style={{ position: 'relative', aspectRatio: '16/10', borderRadius: 10, overflow: 'hidden', cursor: 'pointer', padding: 0, border: `1px solid rgba(${accent.rgb},0.2)` }}
                 >
                   <Image src={img.url} alt={img.alt || project.title} fill sizes="220px" style={{ objectFit: 'cover' }} />
                 </button>
@@ -191,7 +198,7 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
         )}
 
         {project.demoYoutubeId && (
-          <HudPanel title="// How it works">
+          <HudPanel title="How it works" accentRgb={accent.rgb} accentText={accent.text}>
             <div style={{ position: 'relative', aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', background: '#000' }}>
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${project.demoYoutubeId}`}
@@ -205,18 +212,18 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
         )}
 
         {project.readme ? (
-          <HudPanel title="// README">
+          <HudPanel title="README" accentRgb={accent.rgb} accentText={accent.text}>
             <div style={{ maxWidth: 820 }}>
               <Markdown>{project.readme}</Markdown>
             </div>
           </HudPanel>
         ) : project.longDescription ? (
-          <HudPanel title="// Overview">
+          <HudPanel title="Overview" accentRgb={accent.rgb} accentText={accent.text}>
             <p style={{ margin: 0, maxWidth: 820, fontSize: 16, lineHeight: 1.8, color: 'var(--text-secondary)' }}>{project.longDescription}</p>
           </HudPanel>
         ) : null}
 
-        <HudPanel title={`// Comments (${commentList.length})`}>
+        <HudPanel title={`Comments (${commentList.length})`} accentRgb={accent.rgb} accentText={accent.text}>
           <form onSubmit={handleCommentSubmit} style={{ display: 'grid', gap: 12, marginBottom: 28, maxWidth: 560 }}>
             <input
               value={commentName}
@@ -254,10 +261,10 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
                 gap: 8,
                 width: 'fit-content',
                 padding: '10px 20px',
-                borderRadius: 8,
-                background: 'rgba(168,85,247,0.15)',
-                border: '1px solid rgba(168,85,247,0.5)',
-                color: '#d8b4fe',
+                borderRadius: 10,
+                background: `rgba(${accent.rgb},0.15)`,
+                border: `1px solid rgba(${accent.rgb},0.5)`,
+                color: accent.text,
                 fontSize: 14,
                 fontWeight: 600,
                 cursor: commentSubmitting ? 'default' : 'pointer',
@@ -273,7 +280,7 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
           ) : (
             <div style={{ display: 'grid', gap: 16 }}>
               {commentList.map((c) => (
-                <div key={c.id} style={{ paddingBottom: 16, borderBottom: '1px solid rgba(168,85,247,0.12)' }}>
+                <div key={c.id} style={{ paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
                     <span style={{ fontWeight: 700, fontSize: 14 }}>{c.name}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)' }}>
@@ -324,9 +331,9 @@ const ctaBtn: React.CSSProperties = {
 
 const hudInputStyle: React.CSSProperties = {
   padding: '10px 14px',
-  borderRadius: 8,
+  borderRadius: 10,
   background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(168,85,247,0.25)',
+  border: '1px solid rgba(255,255,255,0.14)',
   color: '#ffffff',
   fontSize: 14,
   outline: 'none',

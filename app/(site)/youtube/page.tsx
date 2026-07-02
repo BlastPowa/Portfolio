@@ -4,6 +4,8 @@ import VideoGallery from '@/components/VideoGallery';
 import { prisma } from '@/lib/prisma';
 import type { Video as VideoType } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 async function getVideos() {
   const videos = await prisma.video.findMany({
     orderBy: [{ featured: 'desc' }, { orderIndex: 'asc' }],
