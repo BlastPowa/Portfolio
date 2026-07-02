@@ -93,7 +93,7 @@ export default function HorizontalCarousel({
           onClick={() => emblaApi?.scrollPrev()}
           disabled={!canPrev}
           aria-label="Previous"
-          className="carousel-arrow"
+          className="carousel-arrow carousel-arrow-btn"
           style={{ ...arrowBtn, left: 16, opacity: canPrev ? 1 : 0.3 }}
         >
           <ChevronLeft size={20} />
@@ -102,7 +102,7 @@ export default function HorizontalCarousel({
           onClick={() => emblaApi?.scrollNext()}
           disabled={!canNext}
           aria-label="Next"
-          className="carousel-arrow"
+          className="carousel-arrow carousel-arrow-btn"
           style={{ ...arrowBtn, right: 16, opacity: canNext ? 1 : 0.3 }}
         >
           <ChevronRight size={20} />

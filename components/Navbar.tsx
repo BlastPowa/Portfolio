@@ -14,9 +14,8 @@ interface NavLink {
 
 const LINKS: NavLink[] = [
   { label: 'Home', href: '/' },
-  { label: 'School Projects', href: '/projects/school' },
-  { label: 'Personal Projects', href: '/projects/personal' },
-  { label: 'Videos', href: '/youtube' },
+  { label: 'School', href: '/projects/school' },
+  { label: 'Personal', href: '/projects/personal' },
   { label: 'Roblox', href: '/roblox' },
   { label: 'About', href: '/about' },
 ];
@@ -89,10 +88,10 @@ export default function Navbar() {
                     fontSize: 14,
                     color: active ? '#ffffff' : 'var(--text-secondary)',
                     textDecoration: 'none',
-                    transition: 'color 0.2s',
+                    transition: 'color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     fontFamily: 'var(--font-body)',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#7dd3fc')}
                   onMouseLeave={(e) => (e.currentTarget.style.color = active ? '#ffffff' : 'var(--text-secondary)')}
                 >
                   {link.label}

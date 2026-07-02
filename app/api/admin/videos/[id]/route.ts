@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
+import { pickDefined } from '@/lib/api-helpers';
 
 type Params = { params: Promise<{ id: string }> };
+
+const VIDEO_FIELDS = ['title', 'youtubeId', 'thumbnailUrl', 'description', 'playlist', 'featured', 'orderIndex'] as const;
+
+type VideoData = {
+  title: string;
+  youtubeId: string;
+  thumbnailUrl?: string | null;
+  description?: string | null;
+  playlist?: string | null;
+  featured: boolean;
+  orderIndex: number;
+};
 
 export async function PUT(request: NextRequest, { params }: Params) {
   const session = await getServerSession();
@@ -12,8 +25,9 @@ export async function PUT(request: NextRequest, { params }: Params) {
 
   const { id } = await params;
   const body = await request.json() as Record<string, unknown>;
+  const data = pickDefined<VideoData>(body, [...VIDEO_FIELDS]);
 
-  const video = await prisma.video.update({ where: { id }, data: body });
+  const video = await prisma.video.update({ where: { id }, data });
   return NextResponse.json(video);
 }
 

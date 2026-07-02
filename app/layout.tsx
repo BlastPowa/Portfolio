@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Providers from '@/components/Providers';
+import SoundInit from '@/components/SoundInit';
 
 export const metadata: Metadata = {
-  title: 'BlastPowa Portfolio',
+  title: 'Paul Adelabu Portfolio',
   description: 'Developer. Creator. Builder.',
 };
 
@@ -15,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <SoundInit />
+          {children}
+        </Providers>
       </body>
     </html>
   );

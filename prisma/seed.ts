@@ -10,11 +10,11 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL ?? '' 
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const hash = await bcrypt.hash('portfolio2024', 12);
+  const hash = await bcrypt.hash('portfolio2026', 12);
 
   await prisma.adminUser.upsert({
     where: { username: 'admin' },
-    update: {},
+    update: { passwordHash: hash },
     create: { username: 'admin', passwordHash: hash },
   });
 
@@ -46,21 +46,6 @@ async function main() {
       year: 2025,
       featured: true,
       orderIndex: 1,
-    },
-  });
-
-  await prisma.project.upsert({
-    where: { slug: 'reverie' },
-    update: {},
-    create: {
-      title: 'Reverie',
-      slug: 'reverie',
-      category: 'personal',
-      description: 'A 2D noir detective game where an AI narrator lies to you. Find clues, build evidence, confront the narrator, escape the fake world.',
-      techStack: '["Phaser 3","Next.js","Claude API","TypeScript","Prisma","Supabase"]',
-      year: 2025,
-      featured: true,
-      orderIndex: 2,
     },
   });
 

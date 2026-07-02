@@ -44,6 +44,7 @@ model Video {
   featured     Boolean  @default(false)
   orderIndex   Int      @default(0)
   createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model RobloxGame {
@@ -63,6 +64,7 @@ model RobloxScript {
   category    String
   description String
   codePreview String?
+  imageUrl    String?
   githubUrl   String?
   language    String  @default("Luau")
   orderIndex  Int     @default(0)

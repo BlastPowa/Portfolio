@@ -54,6 +54,7 @@ export interface RobloxScript {
   category: string;
   description: string;
   codePreview?: string | null;
+  imageUrl?: string | null;
   githubUrl?: string | null;
   language: string;
   orderIndex: number;
@@ -67,8 +68,6 @@ export function gradientForCategory(category: string): string {
       return 'var(--grad-school)';
     case 'personal':
       return 'var(--grad-personal)';
-    case 'youtube':
-      return 'var(--grad-youtube)';
     case 'roblox':
       return 'var(--grad-roblox)';
     default:
