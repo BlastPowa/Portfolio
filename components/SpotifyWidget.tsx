@@ -1,58 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Music2, X } from 'lucide-react';
 
 const PLAYLIST_ID = '3MGBZBB8o0mxH5hhotYpTn';
 
-interface NowPlayingState {
-  connected: boolean;
-  isPlaying: boolean;
-}
-
 export default function SpotifyWidget() {
   const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState<NowPlayingState>({ connected: false, isPlaying: false });
-  const [checking, setChecking] = useState(false);
-  const lastCheckedRef = useRef(0);
-
-  async function checkNowPlaying() {
-    if (Date.now() - lastCheckedRef.current < 60_000) return;
-    lastCheckedRef.current = Date.now();
-    setChecking(true);
-    try {
-      const res = await fetch('/api/spotify/now-playing');
-      if (res.ok) {
-        const data = (await res.json()) as NowPlayingState;
-        setStatus(data);
-      }
-    } catch {
-      // ignore — falls back to default embed
-    } finally {
-      setChecking(false);
-    }
-  }
-
-  useEffect(() => {
-    checkNowPlaying();
-  }, []);
-
-  function handleOpen() {
-    setOpen(true);
-    checkNowPlaying();
-  }
-
-  function handleConnect() {
-    const returnTo = window.location.pathname;
-    window.location.href = `/api/spotify/login?returnTo=${encodeURIComponent(returnTo)}`;
-  }
-
-  async function handleDisconnect() {
-    await fetch('/api/spotify/logout', { method: 'POST' });
-    setStatus({ connected: false, isPlaying: false });
-    lastCheckedRef.current = 0;
-  }
 
   return (
     <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 200 }}>
@@ -89,39 +44,15 @@ export default function SpotifyWidget() {
               </button>
             </div>
 
-            {status.connected && status.isPlaying ? (
-              <div style={{ padding: '24px 18px 20px', textAlign: 'center' }}>
-                <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
-                  Playing on your Spotify already — enjoy.
-                </p>
-                <button onClick={handleDisconnect} style={linkBtnStyle}>
-                  Disconnect
-                </button>
-              </div>
-            ) : (
-              <>
-                <iframe
-                  title="Spotify playlist"
-                  src={`https://open.spotify.com/embed/playlist/${PLAYLIST_ID}?utm_source=generator&theme=0`}
-                  width="100%"
-                  height="380"
-                  style={{ border: 'none', display: 'block' }}
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  loading="lazy"
-                />
-                <div style={{ padding: '10px 14px 12px', textAlign: 'center' }}>
-                  {status.connected ? (
-                    <button onClick={handleDisconnect} style={linkBtnStyle}>
-                      Disconnect Spotify
-                    </button>
-                  ) : (
-                    <button onClick={handleConnect} disabled={checking} style={linkBtnStyle}>
-                      Connect Spotify
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
+            <iframe
+              title="Spotify playlist"
+              src={`https://open.spotify.com/embed/playlist/${PLAYLIST_ID}?utm_source=generator&theme=0`}
+              width="100%"
+              height="380"
+              style={{ border: 'none', display: 'block' }}
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            />
           </motion.div>
         ) : (
           <motion.button
@@ -130,7 +61,7 @@ export default function SpotifyWidget() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             whileHover={{ scale: 1.06 }}
-            onClick={handleOpen}
+            onClick={() => setOpen(true)}
             aria-label="Open music player"
             style={{
               width: 56,
@@ -155,13 +86,3 @@ export default function SpotifyWidget() {
     </div>
   );
 }
-
-const linkBtnStyle: React.CSSProperties = {
-  background: 'none',
-  border: 'none',
-  color: 'var(--text-muted)',
-  fontSize: 12,
-  cursor: 'pointer',
-  textDecoration: 'underline',
-  padding: 0,
-};

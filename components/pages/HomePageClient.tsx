@@ -21,7 +21,7 @@ const techItems = [
   { name: 'PostgreSQL' },
   { name: 'Supabase' },
   { name: 'Prisma' },
-  { name: 'Claude API' },
+  { name: 'Node.js' },
   { name: 'Phaser 3' },
   { name: 'Mapbox' },
   { name: 'AWS' },
@@ -207,14 +207,23 @@ export default function HomePageClient({
                 </div>
                 <div>
                   <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 28 }}>Paul Adelabu</h2>
-                  <p style={{ margin: '10px 0 0', color: 'var(--text-secondary)', lineHeight: 1.8 }}>Computing student at TU Dublin, graduating 2026. Head developer on Roblox titles and creator of AI-first tools.</p>
+                  <p style={{ margin: '10px 0 0', color: 'var(--text-secondary)', lineHeight: 1.8 }}>Computing student at TU Dublin, graduating 2027. Head developer on Roblox titles and creator of AI-first tools.</p>
                 </div>
               </div>
             </GlassCard>
             <div style={{ display: 'grid', gap: 16 }}>
-              <div style={statCard}>{statsProjects}</div>
-              <div style={statCard}>{statsTechnologies}</div>
-              <div style={statCard}>{statsRoblox}</div>
+              <div style={statCard}>
+                <span style={statNumber}>{statsProjects}</span>
+                <span style={statLabel}>Projects</span>
+              </div>
+              <div style={statCard}>
+                <span style={statNumber}>{statsTechnologies}</span>
+                <span style={statLabel}>Technologies</span>
+              </div>
+              <div style={statCard}>
+                <span style={statNumber}>{statsRoblox}</span>
+                <span style={statLabel}>Roblox games</span>
+              </div>
             </div>
           </div>
         </section>
