@@ -13,7 +13,7 @@ import TagInput from './TagInput';
 import ImageUpload from './ImageUpload';
 import ConfirmDialog from './ConfirmDialog';
 import Toast, { type ToastType } from './Toast';
-import { parseTechStack } from '@/lib/types';
+import { parseTechStack, parseYoutubeId } from '@/lib/types';
 import type { Project } from '@/lib/types';
 
 interface ProjectsAdminClientProps {
@@ -28,6 +28,8 @@ interface FormState {
   category: string;
   description: string;
   longDescription: string;
+  readme: string;
+  demoYoutubeId: string;
   techStack: string[];
   githubUrl: string;
   liveUrl: string;
@@ -45,6 +47,8 @@ function emptyForm(): FormState {
     category: 'school',
     description: '',
     longDescription: '',
+    readme: '',
+    demoYoutubeId: '',
     techStack: [],
     githubUrl: '',
     liveUrl: '',
@@ -63,6 +67,8 @@ function toFormState(project: Project): FormState {
     category: project.category,
     description: project.description,
     longDescription: project.longDescription ?? '',
+    readme: project.readme ?? '',
+    demoYoutubeId: project.demoYoutubeId ?? '',
     techStack: parseTechStack(project.techStack),
     githubUrl: project.githubUrl ?? '',
     liveUrl: project.liveUrl ?? '',
@@ -121,6 +127,8 @@ export default function ProjectsAdminClient({ initialProjects }: ProjectsAdminCl
         category: form.category,
         description: form.description,
         longDescription: form.longDescription || undefined,
+        readme: form.readme || undefined,
+        demoYoutubeId: parseYoutubeId(form.demoYoutubeId) || undefined,
         techStack: JSON.stringify(form.techStack),
         githubUrl: form.githubUrl || undefined,
         liveUrl: form.liveUrl || undefined,
@@ -252,6 +260,19 @@ export default function ProjectsAdminClient({ initialProjects }: ProjectsAdminCl
 
         <TextField label="GitHub URL" value={form.githubUrl} onChange={(e) => updateField('githubUrl', e.target.value)} />
         <TextField label="Live URL" value={form.liveUrl} onChange={(e) => updateField('liveUrl', e.target.value)} />
+        <TextField
+          label="Demo video (YouTube URL or ID)"
+          value={form.demoYoutubeId}
+          onChange={(e) => updateField('demoYoutubeId', e.target.value)}
+          placeholder="https://youtu.be/… or the 11-char ID"
+        />
+        <TextArea
+          label="README (markdown)"
+          rows={8}
+          value={form.readme}
+          onChange={(e) => updateField('readme', e.target.value)}
+          placeholder="## How it works — supports markdown: headers, **bold**, `code`, lists, tables"
+        />
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           <TextField label="Year" type="number" required value={form.year} onChange={(e) => updateField('year', e.target.value)} />

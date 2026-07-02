@@ -1,6 +1,6 @@
 'use client';
 
-import Navbar from '@/components/Navbar';
+import Link from 'next/link';
 import GlassCard from '@/components/GlassCard';
 import GradientText from '@/components/GradientText';
 import SectionHeader from '@/components/SectionHeader';
@@ -49,11 +49,24 @@ export default function HomePageClient({
 }: HomePageClientProps) {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
-      <Navbar />
-
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 32px 80px', position: 'relative' }}>
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 32px 80px', position: 'relative', overflow: 'hidden' }}>
+        {featuredProjects[0]?.images[0]?.url && (
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `url(${featuredProjects[0].images[0].url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.16,
+              filter: 'blur(8px) saturate(1.1)',
+              transform: 'scale(1.08)',
+            }}
+          />
+        )}
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 30%, rgba(0,212,255,0.18), transparent 22%), radial-gradient(circle at 80% 20%, rgba(123,47,190,0.16), transparent 20%), radial-gradient(circle at 50% 80%, rgba(255,45,85,0.12), transparent 24%)' }} />
-        <div style={{ position: 'relative', width: '100%', maxWidth: 1200, display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 40, alignItems: 'center' }}>
+        <div className="home-hero-grid" style={{ position: 'relative', width: '100%', maxWidth: 1200, display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 40, alignItems: 'center' }}>
           <div style={{ zIndex: 1 }}>
             <p style={{ margin: 0, color: 'var(--text-secondary)', letterSpacing: '0.24em', textTransform: 'uppercase', fontSize: 12 }}>Paul Adelabu — TU Dublin ’26</p>
             <h1 style={{ margin: '22px 0 18px', fontSize: 64, lineHeight: 1.02, maxWidth: 700, fontFamily: 'var(--font-display)' }}>
@@ -104,7 +117,9 @@ export default function HomePageClient({
           ) : (
             <div style={{ display: 'grid', gap: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
               {featuredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <Link key={project.id} href={`/projects/${project.slug}`} style={{ textDecoration: 'none' }}>
+                  <ProjectCard project={project} />
+                </Link>
               ))}
             </div>
           )}
@@ -112,7 +127,7 @@ export default function HomePageClient({
 
         <section>
           <SectionHeader title="About" subtitle="Product-level portfolio with dark cinematic polish." />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <div className="home-about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'center' }}>
             <GlassCard style={{ padding: 28, display: 'grid', gap: 16 }}>
               <div style={{ display: 'grid', gap: 18 }}>
                 <div style={{ width: 120, height: 120, borderRadius: 999, border: '0.5px solid rgba(255,255,255,0.12)', overflow: 'hidden', background: '#111111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -137,13 +152,17 @@ export default function HomePageClient({
           <div style={{ display: 'grid', gap: 24 }}>
             <HorizontalCarousel title="School projects" subtitle="TU Dublin work" gradient="var(--grad-school)" viewAllHref="/projects/school">
               {schoolProjects.map((project) => (
-                <div key={project.id} style={{ width: 360 }}><ProjectCard project={project} /></div>
+                <Link key={project.id} href={`/projects/${project.slug}`} style={{ width: 360, textDecoration: 'none', flexShrink: 0 }}>
+                  <ProjectCard project={project} />
+                </Link>
               ))}
             </HorizontalCarousel>
 
             <HorizontalCarousel title="Personal projects" subtitle="Drift, Reverie, and more" gradient="var(--grad-personal)" viewAllHref="/projects/personal">
               {personalProjects.map((project) => (
-                <div key={project.id} style={{ width: 360 }}><ProjectCard project={project} /></div>
+                <Link key={project.id} href={`/projects/${project.slug}`} style={{ width: 360, textDecoration: 'none', flexShrink: 0 }}>
+                  <ProjectCard project={project} />
+                </Link>
               ))}
             </HorizontalCarousel>
 

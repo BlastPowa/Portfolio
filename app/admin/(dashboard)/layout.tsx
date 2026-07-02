@@ -13,6 +13,7 @@ export default function AdminDashboardLayout({ children }: { children: ReactNode
     >
       <AdminSidebar />
       <main
+        className="admin-main"
         style={{
           flex: 1,
           minHeight: '100vh',
@@ -23,14 +24,6 @@ export default function AdminDashboardLayout({ children }: { children: ReactNode
       >
         {children}
       </main>
-      <style jsx>{`
-        @media (max-width: 768px) {
-          main {
-            margin-left: 0 !important;
-            padding-top: 24px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

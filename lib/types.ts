@@ -13,6 +13,8 @@ export interface Project {
   category: string;
   description: string;
   longDescription?: string | null;
+  readme?: string | null;
+  demoYoutubeId?: string | null;
   techStack: string;
   githubUrl?: string | null;
   liveUrl?: string | null;
@@ -73,6 +75,20 @@ export function gradientForCategory(category: string): string {
     default:
       return 'var(--grad-primary)';
   }
+}
+
+export function parseYoutubeId(input: string): string {
+  const value = input.trim();
+  if (!value) return '';
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([A-Za-z0-9_-]{11})/,
+    /^([A-Za-z0-9_-]{11})$/,
+  ];
+  for (const re of patterns) {
+    const match = value.match(re);
+    if (match) return match[1];
+  }
+  return value;
 }
 
 export function parseTechStack(stack: string): string[] {

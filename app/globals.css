@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @import "tailwindcss";
 
@@ -12,7 +12,7 @@
   --color-text-secondary: rgba(255,255,255,0.6);
   --color-text-muted: rgba(255,255,255,0.35);
 
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
@@ -31,23 +31,22 @@
   --grad-youtube: linear-gradient(135deg, #FF2D55, #BF5AF2);
   --grad-roblox: linear-gradient(135deg, #FF6B6B, #FFA500);
   --grad-school: linear-gradient(135deg, #00D4FF, #7B2FBE);
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { 
-  background: var(--bg-base); 
-  color: var(--text-primary); 
-  font-family: var(--font-body); 
-  margin: 0; 
-  cursor: none;
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
-
-@media (pointer: coarse) { body { cursor: auto; } }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); letter-spacing: -0.02em; }
 
 .cta-btn {
   position: relative;
@@ -95,5 +94,28 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
 .carousel-arrow-btn:hover {
   background: rgba(255, 255, 255, 0.12) !important;
   transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .admin-main {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+    padding: 24px 20px 96px !important;
+  }
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: rgba(0, 212, 255, 0.6) !important;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+}
+
+::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+@media (max-width: 900px) {
+  .home-hero-grid { grid-template-columns: 1fr !important; }
+  .home-about-grid { grid-template-columns: 1fr !important; }
 }
 

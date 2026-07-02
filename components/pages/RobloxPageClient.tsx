@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { Code2, ExternalLink } from 'lucide-react'
+import { Code2, ExternalLink, Gamepad2, FileCode2 } from 'lucide-react'
 import SectionHeader from '../SectionHeader'
 import ScrollReveal from '../ScrollReveal'
 import TechBadge from '../TechBadge'
+import EmptyState from '../EmptyState'
 import type { RobloxGame, RobloxScript } from '@/lib/types'
 
 interface RobloxPageClientProps {
@@ -66,6 +67,9 @@ export default function RobloxPageClient({ games, scripts }: RobloxPageClientPro
       <section style={{ padding: '0 32px 80px', maxWidth: 1200, margin: '0 auto' }}>
         <ScrollReveal>
           <SectionHeader title="Games & Experiences" subtitle="Live Roblox titles and ongoing development" />
+          {games.length === 0 ? (
+            <EmptyState icon={<Gamepad2 size={32} />} title="No games published yet" message="Games added through the admin dashboard will appear here." />
+          ) : (
           <motion.div
             className="roblox-games-grid"
             initial={{ opacity: 0 }}
@@ -178,12 +182,16 @@ export default function RobloxPageClient({ games, scripts }: RobloxPageClientPro
               </motion.div>
             ))}
           </motion.div>
+          )}
         </ScrollReveal>
       </section>
 
       <section style={{ padding: '0 32px 80px', maxWidth: 1200, margin: '0 auto' }}>
         <ScrollReveal>
           <SectionHeader title="Scripts & VFX" subtitle="Utilities, combat systems, and effects" />
+          {scripts.length === 0 ? (
+            <EmptyState icon={<FileCode2 size={32} />} title="No scripts published yet" message="Script snippets added through the admin dashboard will appear here." />
+          ) : (
           <motion.div
             className="roblox-scripts-grid"
             initial={{ opacity: 0 }}
@@ -330,6 +338,7 @@ export default function RobloxPageClient({ games, scripts }: RobloxPageClientPro
               )
             })}
           </motion.div>
+          )}
         </ScrollReveal>
       </section>
 

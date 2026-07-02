@@ -13,6 +13,8 @@ model Project {
   category        String
   description     String
   longDescription String?
+  readme          String?
+  demoYoutubeId   String?
   techStack       String
   githubUrl       String?
   liveUrl         String?

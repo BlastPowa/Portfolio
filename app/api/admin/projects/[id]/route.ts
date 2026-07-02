@@ -11,6 +11,8 @@ const PROJECT_FIELDS = [
   'category',
   'description',
   'longDescription',
+  'readme',
+  'demoYoutubeId',
   'techStack',
   'githubUrl',
   'liveUrl',
@@ -26,6 +28,8 @@ type ProjectData = {
   category: string;
   description: string;
   longDescription?: string | null;
+  readme?: string | null;
+  demoYoutubeId?: string | null;
   techStack: string;
   githubUrl?: string | null;
   liveUrl?: string | null;
