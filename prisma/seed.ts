@@ -10,24 +10,33 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL ?? '' 
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const hash = await bcrypt.hash('portfolio2026', 12);
+  const adminUsername = process.env.ADMIN_USERNAME;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminUsername || !adminPassword) {
+    throw new Error('ADMIN_USERNAME and ADMIN_PASSWORD must be set in the environment (see .env.local) — no credentials are hardcoded in this file.');
+  }
+
+  const hash = await bcrypt.hash(adminPassword, 12);
+
+  await prisma.adminUser.deleteMany({ where: { username: { not: adminUsername } } });
 
   await prisma.adminUser.upsert({
-    where: { username: 'admin' },
+    where: { username: adminUsername },
     update: { passwordHash: hash },
-    create: { username: 'admin', passwordHash: hash },
+    create: { username: adminUsername, passwordHash: hash },
   });
 
   await prisma.project.upsert({
     where: { slug: 'campus-quest' },
-    update: {},
+    update: { year: 2026 },
     create: {
       title: 'Campus Quest',
       slug: 'campus-quest',
       category: 'school',
       description: 'An indoor navigation and gamification app for TUD built with React Native and MazeMap API.',
       techStack: '["React Native","MazeMap API","Node.js","PostgreSQL"]',
-      year: 2024,
+      year: 2026,
       semester: 'Semester 2',
       featured: true,
       orderIndex: 1,
@@ -36,14 +45,14 @@ async function main() {
 
   await prisma.project.upsert({
     where: { slug: 'drift' },
-    update: {},
+    update: { year: 2026 },
     create: {
       title: 'Drift',
       slug: 'drift',
       category: 'personal',
       description: 'AI-powered productivity tool that passively tracks browser tab activity and generates re-entry briefs using Claude API.',
       techStack: '["Next.js","TypeScript","Claude API","Chrome Extension","Prisma","SQLite"]',
-      year: 2025,
+      year: 2026,
       featured: true,
       orderIndex: 1,
     },
@@ -53,18 +62,6 @@ async function main() {
     where: { key: 'bio' },
     update: {},
     create: { key: 'bio', value: 'Developer. Creator. Builder. I make things that work and things that feel good.' },
-  });
-
-  await prisma.setting.upsert({
-    where: { key: 'stats_projects' },
-    update: {},
-    create: { key: 'stats_projects', value: '12' },
-  });
-
-  await prisma.setting.upsert({
-    where: { key: 'stats_technologies' },
-    update: {},
-    create: { key: 'stats_technologies', value: '18' },
   });
 
   await prisma.setting.upsert({

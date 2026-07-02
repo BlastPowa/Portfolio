@@ -29,6 +29,7 @@ interface FormState {
   description: string;
   longDescription: string;
   readme: string;
+  story: string;
   demoYoutubeId: string;
   techStack: string[];
   githubUrl: string;
@@ -48,6 +49,7 @@ function emptyForm(): FormState {
     description: '',
     longDescription: '',
     readme: '',
+    story: '',
     demoYoutubeId: '',
     techStack: [],
     githubUrl: '',
@@ -68,6 +70,7 @@ function toFormState(project: Project): FormState {
     description: project.description,
     longDescription: project.longDescription ?? '',
     readme: project.readme ?? '',
+    story: project.story ?? '',
     demoYoutubeId: project.demoYoutubeId ?? '',
     techStack: parseTechStack(project.techStack),
     githubUrl: project.githubUrl ?? '',
@@ -128,6 +131,7 @@ export default function ProjectsAdminClient({ initialProjects }: ProjectsAdminCl
         description: form.description,
         longDescription: form.longDescription || undefined,
         readme: form.readme || undefined,
+        story: form.story || undefined,
         demoYoutubeId: parseYoutubeId(form.demoYoutubeId) || undefined,
         techStack: JSON.stringify(form.techStack),
         githubUrl: form.githubUrl || undefined,
@@ -265,6 +269,13 @@ export default function ProjectsAdminClient({ initialProjects }: ProjectsAdminCl
           value={form.demoYoutubeId}
           onChange={(e) => updateField('demoYoutubeId', e.target.value)}
           placeholder="https://youtu.be/… or the 11-char ID"
+        />
+        <TextArea
+          label="Project story"
+          rows={3}
+          value={form.story}
+          onChange={(e) => updateField('story', e.target.value)}
+          placeholder="Why you built it — shows as its own section on the project page"
         />
         <TextArea
           label="README (markdown)"

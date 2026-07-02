@@ -41,6 +41,8 @@ export default function PersonalPageClient({ projects }: PersonalPageClientProps
             <div style={{ display: 'grid', gap: 40 }}>
               <ProjectHero projects={projects} gradient="var(--grad-personal)" eyebrow="Featured" />
 
+              <div style={{ width: 120, height: 2, background: 'rgba(255,255,255,0.14)', borderRadius: 1, margin: '0 auto' }} />
+
               <div>
                 <SectionHeader title="All personal projects" subtitle={`${projects.length} project${projects.length === 1 ? '' : 's'}`} />
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 20, marginTop: 8 }}>

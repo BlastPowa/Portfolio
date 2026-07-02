@@ -14,6 +14,7 @@ export interface Project {
   description: string;
   longDescription?: string | null;
   readme?: string | null;
+  story?: string | null;
   demoYoutubeId?: string | null;
   techStack: string;
   githubUrl?: string | null;
@@ -60,6 +61,14 @@ export interface RobloxScript {
   githubUrl?: string | null;
   language: string;
   orderIndex: number;
+}
+
+export interface Comment {
+  id: string;
+  projectId: string;
+  name: string;
+  message: string;
+  createdAt: string;
 }
 
 export type Settings = Record<string, string>;

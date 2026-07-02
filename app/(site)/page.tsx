@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import HomePageClient from '@/components/pages/HomePageClient';
+import { parseTechStack } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ function serializeProject<T extends { createdAt: Date; updatedAt: Date }>(projec
 }
 
 export default async function Home() {
-  const [featured, school, personal, robloxGames, settingRows] = await Promise.all([
+  const [featured, school, personal, robloxGames, settingRows, allTechStacks, projectCount, robloxCount] = await Promise.all([
     prisma.project.findMany({
       where: { featured: true },
       include: { images: { orderBy: { orderIndex: 'asc' } } },
@@ -33,11 +34,19 @@ export default async function Home() {
     }),
     prisma.robloxGame.findMany({ orderBy: { orderIndex: 'asc' }, take: 6 }),
     prisma.setting.findMany(),
+    prisma.project.findMany({ select: { techStack: true } }),
+    prisma.project.count(),
+    prisma.robloxGame.count(),
   ]);
 
   const settings: Record<string, string> = {};
   for (const row of settingRows) {
     settings[row.key] = row.value;
+  }
+
+  const techSet = new Set<string>();
+  for (const row of allTechStacks) {
+    for (const t of parseTechStack(row.techStack)) techSet.add(t.trim());
   }
 
   return (
@@ -46,11 +55,10 @@ export default async function Home() {
       schoolProjects={school.map(serializeProject)}
       personalProjects={personal.map(serializeProject)}
       robloxGames={robloxGames}
-      statsProjects={settings.stats_projects ? `${settings.stats_projects}+` : '0'}
-      statsTechnologies={settings.stats_technologies ? `${settings.stats_technologies}+` : '0'}
-      statsRoblox={String(robloxGames.length)}
+      statsProjects={String(projectCount)}
+      statsTechnologies={String(techSet.size)}
+      statsRoblox={String(robloxCount)}
       contactEmail={settings.contact_email || 'contact@blastpowa.dev'}
-      nowPlaying={robloxGames[0] ?? null}
     />
   );
 }

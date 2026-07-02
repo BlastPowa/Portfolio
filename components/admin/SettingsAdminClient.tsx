@@ -15,8 +15,6 @@ interface SettingsAdminClientProps {
 
 const KNOWN_KEYS: { key: string; label: string; multiline?: boolean }[] = [
   { key: 'bio', label: 'Bio', multiline: true },
-  { key: 'stats_projects', label: 'Stats — projects' },
-  { key: 'stats_technologies', label: 'Stats — technologies' },
   { key: 'contact_email', label: 'Contact email' },
   { key: 'github_url', label: 'GitHub URL' },
   { key: 'youtube_url', label: 'YouTube URL' },

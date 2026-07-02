@@ -1,24 +1,26 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Code2, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Code2, ExternalLink, Send } from 'lucide-react';
 import TechBadge from '../TechBadge';
 import Markdown from '../Markdown';
-import SectionHeader from '../SectionHeader';
 import HorizontalCarousel from '../HorizontalCarousel';
 import ProjectCard from '../ProjectCard';
+import HudPanel from '../HudPanel';
+import ImageLightbox from '../ImageLightbox';
 import { gradientForCategory, parseTechStack } from '@/lib/types';
-import type { Project } from '@/lib/types';
+import type { Project, Comment } from '@/lib/types';
 
 interface Props {
   project: Project;
   related: Project[];
+  comments: Comment[];
 }
 
-export default function ProjectDetailPageClient({ project, related }: Props) {
+export default function ProjectDetailPageClient({ project, related, comments }: Props) {
   const images = project.images;
   const tech = parseTechStack(project.techStack);
   const gradient = gradientForCategory(project.category);
@@ -26,6 +28,14 @@ export default function ProjectDetailPageClient({ project, related }: Props) {
 
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const [commentList, setCommentList] = useState<Comment[]>(comments);
+  const [commentName, setCommentName] = useState('');
+  const [commentMessage, setCommentMessage] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [commentSubmitting, setCommentSubmitting] = useState(false);
+  const [commentError, setCommentError] = useState<string | null>(null);
 
   useEffect(() => {
     if (images.length <= 1 || paused) return;
@@ -34,6 +44,32 @@ export default function ProjectDetailPageClient({ project, related }: Props) {
   }, [images.length, paused]);
 
   const activeImage = images[active];
+
+  async function handleCommentSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!commentName.trim() || !commentMessage.trim()) return;
+    setCommentSubmitting(true);
+    setCommentError(null);
+    try {
+      const res = await fetch(`/api/projects/${project.slug}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: commentName, message: commentMessage, website: honeypot }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(data.error ?? 'Failed to post comment');
+      }
+      const created = (await res.json()) as Comment;
+      setCommentList((list) => [created, ...list]);
+      setCommentName('');
+      setCommentMessage('');
+    } catch (err) {
+      setCommentError((err as Error).message);
+    } finally {
+      setCommentSubmitting(false);
+    }
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
@@ -130,11 +166,33 @@ export default function ProjectDetailPageClient({ project, related }: Props) {
         </div>
       </section>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 32px 96px', display: 'grid', gap: 64 }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 32px 96px', display: 'grid', gap: 56 }}>
+        {project.story && (
+          <HudPanel title="// LOG: Why I built this">
+            <p style={{ margin: 0, maxWidth: 820, fontSize: 16, lineHeight: 1.8, color: 'var(--text-secondary)' }}>{project.story}</p>
+          </HudPanel>
+        )}
+
+        {images.length > 0 && (
+          <HudPanel title="// Gallery">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 14 }}>
+              {images.map((img, i) => (
+                <button
+                  key={img.id}
+                  onClick={() => setLightboxIndex(i)}
+                  aria-label={`View image ${i + 1} full size`}
+                  style={{ position: 'relative', aspectRatio: '16/10', borderRadius: 8, overflow: 'hidden', cursor: 'pointer', padding: 0, border: '1px solid rgba(56,189,248,0.2)' }}
+                >
+                  <Image src={img.url} alt={img.alt || project.title} fill sizes="220px" style={{ objectFit: 'cover' }} />
+                </button>
+              ))}
+            </div>
+          </HudPanel>
+        )}
+
         {project.demoYoutubeId && (
-          <section style={{ display: 'grid', gap: 20 }}>
-            <SectionHeader title="How it works" subtitle="A quick walkthrough of the project in action" />
-            <div style={{ position: 'relative', aspectRatio: '16/9', borderRadius: 16, overflow: 'hidden', border: '0.5px solid rgba(255,255,255,0.1)', background: '#000' }}>
+          <HudPanel title="// How it works">
+            <div style={{ position: 'relative', aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', background: '#000' }}>
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${project.demoYoutubeId}`}
                 title={`${project.title} demo`}
@@ -143,22 +201,91 @@ export default function ProjectDetailPageClient({ project, related }: Props) {
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
               />
             </div>
-          </section>
+          </HudPanel>
         )}
 
         {project.readme ? (
-          <section style={{ display: 'grid', gap: 20 }}>
-            <SectionHeader title="README" subtitle="Full write-up" />
+          <HudPanel title="// README">
             <div style={{ maxWidth: 820 }}>
               <Markdown>{project.readme}</Markdown>
             </div>
-          </section>
+          </HudPanel>
         ) : project.longDescription ? (
-          <section style={{ display: 'grid', gap: 20 }}>
-            <SectionHeader title="Overview" />
+          <HudPanel title="// Overview">
             <p style={{ margin: 0, maxWidth: 820, fontSize: 16, lineHeight: 1.8, color: 'var(--text-secondary)' }}>{project.longDescription}</p>
-          </section>
+          </HudPanel>
         ) : null}
+
+        <HudPanel title={`// Comments (${commentList.length})`}>
+          <form onSubmit={handleCommentSubmit} style={{ display: 'grid', gap: 12, marginBottom: 28, maxWidth: 560 }}>
+            <input
+              value={commentName}
+              onChange={(e) => setCommentName(e.target.value)}
+              placeholder="Your name"
+              maxLength={60}
+              required
+              style={hudInputStyle}
+            />
+            <textarea
+              value={commentMessage}
+              onChange={(e) => setCommentMessage(e.target.value)}
+              placeholder="Leave a thought or review…"
+              maxLength={1000}
+              rows={3}
+              required
+              style={{ ...hudInputStyle, resize: 'vertical', fontFamily: 'var(--font-body)' }}
+            />
+            <input
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              name="website"
+              autoComplete="off"
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
+            />
+            {commentError && <p style={{ margin: 0, color: '#ff7c7c', fontSize: 13 }}>{commentError}</p>}
+            <button
+              type="submit"
+              disabled={commentSubmitting}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                width: 'fit-content',
+                padding: '10px 20px',
+                borderRadius: 8,
+                background: 'rgba(56,189,248,0.15)',
+                border: '1px solid rgba(56,189,248,0.5)',
+                color: '#7dd3fc',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: commentSubmitting ? 'default' : 'pointer',
+                opacity: commentSubmitting ? 0.6 : 1,
+              }}
+            >
+              <Send size={14} /> {commentSubmitting ? 'Posting…' : 'Post comment'}
+            </button>
+          </form>
+
+          {commentList.length === 0 ? (
+            <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: 14 }}>No comments yet — be the first to share your thoughts.</p>
+          ) : (
+            <div style={{ display: 'grid', gap: 16 }}>
+              {commentList.map((c) => (
+                <div key={c.id} style={{ paddingBottom: 16, borderBottom: '1px solid rgba(56,189,248,0.12)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+                    <span style={{ fontWeight: 700, fontSize: 14 }}>{c.name}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)' }}>
+                      {new Date(c.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.6 }}>{c.message}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </HudPanel>
 
         {related.length > 0 && (
           <section>
@@ -172,6 +299,13 @@ export default function ProjectDetailPageClient({ project, related }: Props) {
           </section>
         )}
       </div>
+
+      <ImageLightbox
+        images={images.map((img) => ({ url: img.url, alt: img.alt || project.title }))}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={setLightboxIndex}
+      />
     </div>
   );
 }
@@ -186,4 +320,14 @@ const ctaBtn: React.CSSProperties = {
   fontWeight: 600,
   textDecoration: 'none',
   cursor: 'pointer',
+};
+
+const hudInputStyle: React.CSSProperties = {
+  padding: '10px 14px',
+  borderRadius: 8,
+  background: 'rgba(255,255,255,0.04)',
+  border: '1px solid rgba(56,189,248,0.25)',
+  color: '#ffffff',
+  fontSize: 14,
+  outline: 'none',
 };

@@ -8,6 +8,7 @@ import {
   FolderOpen,
   Film,
   Gamepad2,
+  MessageSquare,
   Settings,
   LogOut,
 } from 'lucide-react';
@@ -24,6 +25,7 @@ const ITEMS: NavItem[] = [
   { label: 'Projects', href: '/admin/projects', Icon: FolderOpen },
   { label: 'Videos', href: '/admin/videos', Icon: Film },
   { label: 'Roblox', href: '/admin/roblox', Icon: Gamepad2 },
+  { label: 'Comments', href: '/admin/comments', Icon: MessageSquare },
   { label: 'Settings', href: '/admin/settings', Icon: Settings },
 ];
 

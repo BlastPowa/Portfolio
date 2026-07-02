@@ -1,6 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
 import GradientText from '@/components/GradientText';
 import SectionHeader from '@/components/SectionHeader';
@@ -8,6 +11,7 @@ import ProjectCard from '@/components/ProjectCard';
 import HorizontalCarousel from '@/components/HorizontalCarousel';
 import InfiniteMarquee from '@/components/InfiniteMarquee';
 import type { Project, RobloxGame } from '@/lib/types';
+import { gradientForCategory } from '@/lib/types';
 
 const techItems = [
   { name: 'Next.js' },
@@ -33,7 +37,6 @@ interface HomePageClientProps {
   statsTechnologies: string;
   statsRoblox: string;
   contactEmail: string;
-  nowPlaying: RobloxGame | null;
 }
 
 export default function HomePageClient({
@@ -45,26 +48,49 @@ export default function HomePageClient({
   statsTechnologies,
   statsRoblox,
   contactEmail,
-  nowPlaying,
 }: HomePageClientProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (featuredProjects.length <= 1 || paused) return;
+    const id = setInterval(() => setActiveIndex((i) => (i + 1) % featuredProjects.length), 7000);
+    return () => clearInterval(id);
+  }, [featuredProjects.length, paused]);
+
+  const spotlight = featuredProjects[activeIndex] ?? null;
+  const spotlightImage = spotlight?.images[0]?.url;
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 32px 80px', position: 'relative', overflow: 'hidden' }}>
-        {featuredProjects[0]?.images[0]?.url && (
-          <div
-            aria-hidden
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: `url(${featuredProjects[0].images[0].url})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              opacity: 0.16,
-              filter: 'blur(8px) saturate(1.1)',
-              transform: 'scale(1.08)',
-            }}
-          />
-        )}
+      <section
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 32px 80px', position: 'relative', overflow: 'hidden' }}
+      >
+        <AnimatePresence mode="sync">
+          {spotlightImage && (
+            <motion.div
+              key={spotlight!.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.9 }}
+              aria-hidden
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage: `url(${spotlightImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                opacity: 0.32,
+                filter: 'blur(6px) saturate(1.1)',
+                transform: 'scale(1.08)',
+              }}
+            />
+          )}
+        </AnimatePresence>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(8,8,8,0.55), rgba(8,8,8,0.85) 60%, var(--bg-base))' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 30%, rgba(0,212,255,0.18), transparent 22%), radial-gradient(circle at 80% 20%, rgba(123,47,190,0.16), transparent 20%), radial-gradient(circle at 50% 80%, rgba(255,45,85,0.12), transparent 24%)' }} />
         <div className="home-hero-grid" style={{ position: 'relative', width: '100%', maxWidth: 1200, display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 40, alignItems: 'center' }}>
           <div style={{ zIndex: 1 }}>
@@ -86,8 +112,19 @@ export default function HomePageClient({
             <div style={{ position: 'absolute', top: 24, left: 24, right: 24, padding: 24, borderRadius: 24, background: 'rgba(8,8,8,0.85)', border: '0.5px solid rgba(255,255,255,0.08)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}>
                 <div>
-                  <div style={{ fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Now playing</div>
-                  <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-display)', fontSize: 24 }}>{nowPlaying?.title ?? 'No games yet'}</h2>
+                  <div style={{ fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Now viewing</div>
+                  <AnimatePresence mode="wait">
+                    <motion.h2
+                      key={spotlight?.id ?? 'none'}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      style={{ margin: '10px 0 0', fontFamily: 'var(--font-display)', fontSize: 24 }}
+                    >
+                      {spotlight?.title ?? 'No featured projects yet'}
+                    </motion.h2>
+                  </AnimatePresence>
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text-muted)' }}>Live dev loop</div>
               </div>
@@ -95,12 +132,47 @@ export default function HomePageClient({
             <div style={{ position: 'absolute', bottom: 20, left: 20, right: 20, padding: 24, borderRadius: 24, background: 'rgba(8,8,8,0.75)', border: '0.5px solid rgba(255,255,255,0.08)' }}>
               <div style={{ display: 'grid', gap: 14 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 16, height: 16, borderRadius: '50%', background: 'var(--grad-roblox)' }} />
+                  <div style={{ width: 16, height: 16, borderRadius: '50%', background: spotlight ? gradientForCategory(spotlight.category) : 'var(--grad-primary)' }} />
                   <div style={{ fontFamily: 'var(--font-mono)', letterSpacing: '0.12em', fontSize: 12, color: 'var(--text-muted)' }}>Featured title</div>
                 </div>
-                <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-                  {nowPlaying?.description ?? 'Add a Roblox game through the admin dashboard to feature it here.'}
-                </p>
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={spotlight?.id ?? 'none'}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+                  >
+                    {spotlight?.description ?? 'Add a featured project through the admin dashboard to spotlight it here.'}
+                  </motion.p>
+                </AnimatePresence>
+                {spotlight && (
+                  <Link href={`/projects/${spotlight.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: '#ffffff', textDecoration: 'none', width: 'fit-content' }}>
+                    View more <ArrowRight size={14} />
+                  </Link>
+                )}
+                {featuredProjects.length > 1 && (
+                  <div style={{ display: 'flex', gap: 6, marginTop: 2 }}>
+                    {featuredProjects.map((p, i) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setActiveIndex(i)}
+                        aria-label={`Show ${p.title}`}
+                        style={{
+                          width: i === activeIndex ? 20 : 6,
+                          height: 6,
+                          borderRadius: 3,
+                          border: 'none',
+                          padding: 0,
+                          cursor: 'pointer',
+                          background: i === activeIndex ? '#ffffff' : 'rgba(255,255,255,0.25)',
+                          transition: 'width 0.2s, background 0.2s',
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

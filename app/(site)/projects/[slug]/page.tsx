@@ -44,10 +44,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     take: 6,
   });
 
+  const comments = await prisma.comment.findMany({
+    where: { projectId: project.id },
+    orderBy: { createdAt: 'desc' },
+  });
+
   return (
     <ProjectDetailPageClient
       project={serialize(project)}
       related={related.map(serialize)}
+      comments={comments.map((c) => ({ ...c, createdAt: c.createdAt.toISOString() }))}
     />
   );
 }

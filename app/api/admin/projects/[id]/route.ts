@@ -12,6 +12,7 @@ const PROJECT_FIELDS = [
   'description',
   'longDescription',
   'readme',
+  'story',
   'demoYoutubeId',
   'techStack',
   'githubUrl',
@@ -29,6 +30,7 @@ type ProjectData = {
   description: string;
   longDescription?: string | null;
   readme?: string | null;
+  story?: string | null;
   demoYoutubeId?: string | null;
   techStack: string;
   githubUrl?: string | null;
