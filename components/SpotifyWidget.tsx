@@ -65,7 +65,8 @@ export default function SpotifyWidget() {
             exit={{ opacity: 0, scale: 0.9, y: 12 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
             style={{
-              width: 320,
+              width: 420,
+              maxWidth: 'calc(100vw - 48px)',
               borderRadius: 20,
               background: 'rgba(20,20,24,0.65)',
               backdropFilter: 'blur(24px) saturate(1.4)',
@@ -103,7 +104,7 @@ export default function SpotifyWidget() {
                   title="Spotify playlist"
                   src={`https://open.spotify.com/embed/playlist/${PLAYLIST_ID}?utm_source=generator&theme=0`}
                   width="100%"
-                  height="152"
+                  height="380"
                   style={{ border: 'none', display: 'block' }}
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"

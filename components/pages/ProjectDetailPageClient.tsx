@@ -181,7 +181,7 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
                   key={img.id}
                   onClick={() => setLightboxIndex(i)}
                   aria-label={`View image ${i + 1} full size`}
-                  style={{ position: 'relative', aspectRatio: '16/10', borderRadius: 8, overflow: 'hidden', cursor: 'pointer', padding: 0, border: '1px solid rgba(56,189,248,0.2)' }}
+                  style={{ position: 'relative', aspectRatio: '16/10', borderRadius: 8, overflow: 'hidden', cursor: 'pointer', padding: 0, border: '1px solid rgba(168,85,247,0.2)' }}
                 >
                   <Image src={img.url} alt={img.alt || project.title} fill sizes="220px" style={{ objectFit: 'cover' }} />
                 </button>
@@ -255,9 +255,9 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
                 width: 'fit-content',
                 padding: '10px 20px',
                 borderRadius: 8,
-                background: 'rgba(56,189,248,0.15)',
-                border: '1px solid rgba(56,189,248,0.5)',
-                color: '#7dd3fc',
+                background: 'rgba(168,85,247,0.15)',
+                border: '1px solid rgba(168,85,247,0.5)',
+                color: '#d8b4fe',
                 fontSize: 14,
                 fontWeight: 600,
                 cursor: commentSubmitting ? 'default' : 'pointer',
@@ -273,7 +273,7 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
           ) : (
             <div style={{ display: 'grid', gap: 16 }}>
               {commentList.map((c) => (
-                <div key={c.id} style={{ paddingBottom: 16, borderBottom: '1px solid rgba(56,189,248,0.12)' }}>
+                <div key={c.id} style={{ paddingBottom: 16, borderBottom: '1px solid rgba(168,85,247,0.12)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
                     <span style={{ fontWeight: 700, fontSize: 14 }}>{c.name}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)' }}>
@@ -326,7 +326,7 @@ const hudInputStyle: React.CSSProperties = {
   padding: '10px 14px',
   borderRadius: 8,
   background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(56,189,248,0.25)',
+  border: '1px solid rgba(168,85,247,0.25)',
   color: '#ffffff',
   fontSize: 14,
   outline: 'none',
