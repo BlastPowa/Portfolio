@@ -105,7 +105,7 @@ export default function RobloxPageClient({ games, scripts }: RobloxPageClientPro
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   ) : game.thumbnailUrl ? (
-                    <Image src={game.thumbnailUrl} alt={game.title} fill style={{ objectFit: 'cover' }} />
+                    <Image src={game.thumbnailUrl} alt={game.title} fill sizes="(max-width: 768px) 100vw, 400px" quality={90} style={{ objectFit: 'cover' }} />
                   ) : (
                     <div style={{ width: '100%', height: '100%', background: 'var(--grad-roblox)', opacity: 0.4 }} />
                   )}
@@ -262,7 +262,7 @@ export default function RobloxPageClient({ games, scripts }: RobloxPageClientPro
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       ) : (
-                        <Image src={script.imageUrl} alt={script.title} fill style={{ objectFit: 'cover' }} />
+                        <Image src={script.imageUrl} alt={script.title} fill sizes="(max-width: 768px) 100vw, 280px" quality={90} style={{ objectFit: 'cover' }} />
                       )}
                     </div>
                   )}

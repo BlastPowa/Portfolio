@@ -49,7 +49,7 @@ export default function AboutPageClient({
         <header style={{ display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap' }}>
           {avatarUrl && (
             <div style={{ position: 'relative', width: 96, height: 96, borderRadius: 999, overflow: 'hidden', border: '0.5px solid rgba(255,255,255,0.14)', flexShrink: 0 }}>
-              <Image src={avatarUrl} alt="Paul Adelabu" fill sizes="96px" style={{ objectFit: 'cover' }} />
+              <Image src={avatarUrl} alt="Paul Adelabu" fill sizes="96px" quality={90} style={{ objectFit: 'cover' }} />
             </div>
           )}
           <div style={{ display: 'grid', gap: 18 }}>

@@ -65,7 +65,7 @@ export default function ImageLightbox({ images, index, onClose, onNavigate }: Im
           )}
 
           <div onClick={(e) => e.stopPropagation()} style={{ position: 'relative', width: '90vw', height: '80vh', maxWidth: 1400 }}>
-            <Image src={current.url} alt={current.alt} fill style={{ objectFit: 'contain' }} />
+            <Image src={current.url} alt={current.alt} fill sizes="90vw" quality={100} style={{ objectFit: 'contain' }} />
           </div>
 
           {images.length > 1 && (

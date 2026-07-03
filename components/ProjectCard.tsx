@@ -49,6 +49,7 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
             alt={project.images[0]?.alt ?? project.title}
             fill
             sizes="(max-width: 768px) 100vw, 400px"
+            quality={90}
             style={{ objectFit: 'cover' }}
           />
         ) : (

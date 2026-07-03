@@ -58,7 +58,7 @@ export default function CinemaOSRow({ project, onClick, delay = 0 }: CinemaOSRow
       >
         {project.images && project.images[0] ? (
           <motion.div style={{ position: 'relative', width: '100%', height: '100%' }} whileHover={{ scale: 1.03 }}>
-            <Image src={project.images[0].url} alt={project.title} fill style={{ objectFit: 'cover' }} />
+            <Image src={project.images[0].url} alt={project.title} fill sizes="320px" quality={90} style={{ objectFit: 'cover' }} />
           </motion.div>
         ) : (
           <div style={{ width: '100%', height: '100%', background: gradientForCategory(project.category), opacity: 0.4 }} />

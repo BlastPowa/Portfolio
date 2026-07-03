@@ -49,7 +49,7 @@ export default function ProjectHero({ projects, gradient, eyebrow }: ProjectHero
               style={{ position: 'absolute', inset: 0 }}
             >
               {image ? (
-                <Image src={image} alt={current.title} fill priority style={{ objectFit: 'cover' }} />
+                <Image src={image} alt={current.title} fill priority sizes="(max-width: 1200px) 100vw, 1200px" quality={90} style={{ objectFit: 'cover' }} />
               ) : (
                 <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(circle at 80% 25%, rgba(255,255,255,0.06), transparent 55%), ${gradient}`, opacity: 0.45 }} />
               )}
@@ -108,7 +108,7 @@ export default function ProjectHero({ projects, gradient, eyebrow }: ProjectHero
                 }}
               >
                 {thumb ? (
-                  <Image src={thumb} alt={p.title} fill sizes="128px" style={{ objectFit: 'cover' }} />
+                  <Image src={thumb} alt={p.title} fill sizes="128px" quality={90} style={{ objectFit: 'cover' }} />
                 ) : (
                   <div style={{ position: 'absolute', inset: 0, background: gradient, opacity: 0.4 }} />
                 )}

@@ -96,7 +96,7 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
                 transition={{ duration: 0.9 }}
                 style={{ position: 'absolute', inset: 0 }}
               >
-                <Image src={activeImage.url} alt={activeImage.alt || project.title} fill priority style={{ objectFit: 'cover' }} />
+                <Image src={activeImage.url} alt={activeImage.alt || project.title} fill priority sizes="100vw" quality={90} style={{ objectFit: 'cover' }} />
               </motion.div>
             ) : (
               <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(circle at 78% 22%, rgba(255,255,255,0.06), transparent 55%), ${gradient}`, opacity: 0.5 }} />
@@ -165,7 +165,7 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
                     transition: 'opacity 0.2s',
                   }}
                 >
-                  <Image src={img.url} alt={img.alt || project.title} fill sizes="104px" style={{ objectFit: 'cover' }} />
+                  <Image src={img.url} alt={img.alt || project.title} fill sizes="104px" quality={90} style={{ objectFit: 'cover' }} />
                 </button>
               ))}
             </div>
@@ -190,7 +190,7 @@ export default function ProjectDetailPageClient({ project, related, comments }: 
                   aria-label={`View image ${i + 1} full size`}
                   style={{ position: 'relative', aspectRatio: '16/10', borderRadius: 10, overflow: 'hidden', cursor: 'pointer', padding: 0, border: `1px solid rgba(${accent.rgb},0.2)` }}
                 >
-                  <Image src={img.url} alt={img.alt || project.title} fill sizes="220px" style={{ objectFit: 'cover' }} />
+                  <Image src={img.url} alt={img.alt || project.title} fill sizes="220px" quality={90} style={{ objectFit: 'cover' }} />
                 </button>
               ))}
             </div>

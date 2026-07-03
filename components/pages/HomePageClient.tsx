@@ -119,7 +119,7 @@ export default function HomePageClient({
             <div style={{ display: 'grid', gap: 18 }}>
               <div style={{ position: 'relative', width: 120, height: 120, borderRadius: 999, border: '0.5px solid rgba(255,255,255,0.12)', overflow: 'hidden', background: '#111111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {avatarUrl ? (
-                  <Image src={avatarUrl} alt="Paul Adelabu" fill sizes="120px" style={{ objectFit: 'cover' }} />
+                  <Image src={avatarUrl} alt="Paul Adelabu" fill sizes="120px" quality={90} style={{ objectFit: 'cover' }} />
                 ) : (
                   <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Avatar</span>
                 )}

@@ -29,7 +29,7 @@ export default function VideoCard({ video, onClick }: VideoCardProps) {
       }}
       className="video-card"
     >
-      <Image src={thumb} alt={video.title} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 400px" />
+      <Image src={thumb} alt={video.title} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 400px" quality={90} />
 
       <div
         style={{
