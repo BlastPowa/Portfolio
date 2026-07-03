@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import AboutPageClient from '@/components/pages/AboutPageClient';
+import AboutAdminClient from '@/components/admin/AboutAdminClient';
 import {
   parseJsonSetting,
   DEFAULT_TIMELINE,
@@ -10,7 +10,7 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-export default async function AboutPage() {
+export default async function AdminAboutPage() {
   const rows = await prisma.setting.findMany();
   const settings: Record<string, string> = {};
   for (const row of rows) {
@@ -18,11 +18,7 @@ export default async function AboutPage() {
   }
 
   return (
-    <AboutPageClient
-      contactEmail={settings.contact_email || 'contact@blastpowa.dev'}
-      githubUrl={settings.github_url || ''}
-      youtubeUrl={settings.youtube_url || ''}
-      instagramUrl={settings.instagram_url || ''}
+    <AboutAdminClient
       avatarUrl={settings.about_avatar_url || ''}
       timeline={parseJsonSetting(settings.about_timeline, DEFAULT_TIMELINE)}
       skillGroups={parseJsonSetting(settings.about_skills, DEFAULT_SKILLS)}

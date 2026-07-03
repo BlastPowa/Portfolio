@@ -9,6 +9,7 @@ import {
   Film,
   Gamepad2,
   MessageSquare,
+  User,
   Settings,
   LogOut,
 } from 'lucide-react';
@@ -26,6 +27,7 @@ const ITEMS: NavItem[] = [
   { label: 'Projects', href: `${ADMIN_BASE}/projects`, Icon: FolderOpen },
   { label: 'Videos', href: `${ADMIN_BASE}/videos`, Icon: Film },
   { label: 'Roblox', href: `${ADMIN_BASE}/roblox`, Icon: Gamepad2 },
+  { label: 'About', href: `${ADMIN_BASE}/about`, Icon: User },
   { label: 'Comments', href: `${ADMIN_BASE}/comments`, Icon: MessageSquare },
   { label: 'Settings', href: `${ADMIN_BASE}/settings`, Icon: Settings },
 ];

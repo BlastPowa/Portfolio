@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
@@ -54,6 +55,7 @@ interface HomePageClientProps {
   ctaHeading: string;
   ctaSubtext: string;
   sectionOrder: string[];
+  avatarUrl: string;
 }
 
 export default function HomePageClient({
@@ -72,6 +74,7 @@ export default function HomePageClient({
   ctaHeading,
   ctaSubtext,
   sectionOrder,
+  avatarUrl,
 }: HomePageClientProps) {
   const orderedSections = [
     ...sectionOrder.filter((key) => key in SECTION_LABELS),
@@ -114,8 +117,12 @@ export default function HomePageClient({
         <div className="home-about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'center' }}>
           <GlassCard style={{ padding: 28, display: 'grid', gap: 16 }}>
             <div style={{ display: 'grid', gap: 18 }}>
-              <div style={{ width: 120, height: 120, borderRadius: 999, border: '0.5px solid rgba(255,255,255,0.12)', overflow: 'hidden', background: '#111111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Avatar</span>
+              <div style={{ position: 'relative', width: 120, height: 120, borderRadius: 999, border: '0.5px solid rgba(255,255,255,0.12)', overflow: 'hidden', background: '#111111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {avatarUrl ? (
+                  <Image src={avatarUrl} alt="Paul Adelabu" fill sizes="120px" style={{ objectFit: 'cover' }} />
+                ) : (
+                  <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Avatar</span>
+                )}
               </div>
               <div>
                 <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontSize: 28 }}>Paul Adelabu</h2>

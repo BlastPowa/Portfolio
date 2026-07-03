@@ -76,6 +76,7 @@ export default async function Home() {
       ctaHeading={settings.home_cta_heading || 'Let’s build the next product together.'}
       ctaSubtext={settings.home_cta_subtext || 'Contact Paul directly and show work that feels cinematic.'}
       sectionOrder={sectionOrder}
+      avatarUrl={settings.about_avatar_url || ''}
     />
   );
 }
